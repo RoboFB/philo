@@ -6,7 +6,7 @@
 #    By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 10:21:00 by rgohrig           #+#    #+#              #
-#    Updated: 2025/07/24 11:23:54 by rgohrig          ###   ########.fr        #
+#    Updated: 2025/07/25 17:27:23 by rgohrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,9 @@
 
 NAME :=			philo
 CC :=			cc
-CFLAGS :=		-Wall -Werror -Wextra# standard flags
-# CFLAGS :=		-Wall -Werror -Wextra -g -fsanitize=address,undefined# debug
+DEBUG_FLAGS := -g -fsanitize=address,undefined,pointer-compare,pointer-subtract# -g3 -O0 # debug flags
+DEBUG_FLAGS2 := -g -fsanitize=memory,thread# -g3 -O0 # debug flags
+CFLAGS :=		-Wall -Werror -Wextra $(DEBUG_FLAGS)# standard flags
 export CFLAGS # set also for the libft
 
 HEADERS :=		-I ./include
@@ -30,22 +31,19 @@ OBJ :=			$(SRC:%.c=$(DIR_OBJ)/%.o)
 
 # ----------------------------- NORMAL -----------------------------------------
 
-all: $(LIBFT)/libft.a $(NAME)
-
-$(LIBFT)/libft.a:
-	@$(MAKE) -C $(LIBFT)
+all: lazy $(NAME)# temporary
 
 $(DIR_OBJ):
 	mkdir $(DIR_OBJ)
 
 $(DIR_OBJ)/%.o : $(DIR_SRC)/%.c | $(DIR_OBJ)
 	@$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
-	@echo 🖇 $@
+	@echo 🍽 $@
 
 # executable
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
-	@echo "\n🖇🖇🖇 $@   ($(CFLAGS))\n"
+	@$(CC) $(CFLAGS) -o $@ $^
+	@echo "\n🍽🍝🍽 $@   ($(CFLAGS))\n"
 
 # ----------------------------- lazy ------------------------------------------
 
@@ -73,12 +71,10 @@ lazy:
 clean:
 	@rm -f $(OBJ)
 	@echo 🧹 cleaned all objects
-	@$(MAKE) -C $(LIBFT) clean
 
 fclean: clean
 	@rm -f $(NAME)
 	@echo 🧹🧹🧹 cleaned $(NAME)
-	@$(MAKE) -C $(LIBFT) fclean
 
 re: fclean all
 
