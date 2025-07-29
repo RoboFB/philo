@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:24:17 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 13:31:32 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:38:17 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	main(int argc, char const *argv[])
 
 
 	memset(&data, 0, sizeof(t_philos));
+	if (gettimeofday(&data.start_time, NULL) == ERROR)
+	{
+		printf("Error: gettimeofday failed\n");
+		return (EXIT_FAILURE);
+	}
 	if (parser(argc, argv, &data) == ERROR)
 	{
 		printf("Error: Invalid arguments.\n");

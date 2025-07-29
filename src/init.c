@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:38:39 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 13:30:10 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 15:06:01 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	init_phil_array(t_philos *data)
 			data->philos[count].fork_left = data->forks_mtx + count - 1;
 		data->philos[count].fork_right = data->forks_mtx + count;
 		data->philos[count].thread_phil = data->threads_philos + count;
-		data->philos[count].status = data->states + count;
+		data->philos[count].state = data->states + count;
 		data->philos[count].data = data;
 		count++;
 	}

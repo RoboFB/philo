@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 13:34:13 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 15:06:01 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ typedef int		t_ms;
 typedef enum e_philo_state
 {
 	THINKING = 0, // init value
-	EATING,
-	SLEEPING,
-	DEAD
+	EATING = 1,
+	SLEEPING = 2,
+	DEAD = 3
 }				t_philo_state;
 
 typedef struct s_phil t_phil;
@@ -45,6 +45,7 @@ typedef struct s_philos
 	int					eat_ms;
 	int					sleep_ms;
 	int					max_eat;
+	struct timeval		start_time;
 
 	pthread_t			*threads_philos; //Malloc Array
 	t_phil				*philos; // Malloc Array
@@ -81,9 +82,10 @@ left_fork        right_fork
 // only pointers -> memory management in the main thread
 typedef struct s_phil
 {
+	int					id; // todo init it
 	pthread_t			*thread_phil;
 
-	t_philo_state		*status;
+	t_philo_state		*state;
 	pthread_mutex_t		*fork_left;
 	pthread_mutex_t		*fork_right;
 
