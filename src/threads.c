@@ -6,20 +6,20 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:37:40 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/28 17:37:46 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:31:32 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void start_philos(t_philos *data)
+void create_philos(t_philos *data)
 {
 	int count;
 
 	count = 0;
 	while (count < data->total_philos)
 	{
-		pthread_create(&data->philos[count], NULL, (void *)single, NULL);
+		pthread_create(&data->threads_philos[count], NULL, (void *)single, NULL);
 		count++;
 	}
 	
@@ -28,14 +28,14 @@ void start_philos(t_philos *data)
 }
 
 
-void stop_philos(t_philos *data)
+void join_philos(t_philos *data)
 {
 	int count;
 
 	count = 0;
 	while (count < data->total_philos)
 	{
-		pthread_join(data->philos[count], NULL);
+		pthread_join(data->threads_philos[count], NULL);
 		count++;
 	}
 	return ;

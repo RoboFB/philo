@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:24:17 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/28 19:22:33 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:31:32 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,26 @@ int	main(int argc, char const *argv[])
 		return (EXIT_FAILURE);
 	}
 
-	data.philos = malloc((data.total_philos + 1) * sizeof(pthread_t));
-	memset(data.philos, 0, (data.total_philos + 1) * sizeof(pthread_t));
+	if (init_arrays(&data) == ERROR || init_phil_array(&data) == ERROR)
+	{
+		printf("Error: Failed to initialize arrays.\n");
+		free_arrays(&data);
+		return (EXIT_FAILURE);
+	}
+	if (init_all_mtx(&data) == ERROR)
+	{
+		printf("Error: Failed to initialize forks.\n");
+		destroy_all_mtx(&data);
+		free_arrays(&data);
+		return (EXIT_FAILURE);
+	}
 
-	data.forks = malloc((data.total_philos + 1) * sizeof(pthread_mutex_t));
-	memset(data.forks, 0, (data.total_philos + 1) * sizeof(pthread_mutex_t));
+	create_philos(&data);
+	printf("Runing\n");
+	join_philos(&data);
 
-	init_forks(data.forks, data.total_philos);
-
-	start_philos(&data);
-	printf("test\n");
-
-	stop_philos(&data);
-	// pthread_join(, NULL);
+	destroy_all_mtx(&data);
+	free_arrays(&data);
 	return (EXIT_SUCCESS);
 }
 

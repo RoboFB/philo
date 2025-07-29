@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/28 20:59:44 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:34:13 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ typedef int		t_ms;
 
 typedef enum e_philo_state
 {
-	THINKING,
+	THINKING = 0, // init value
 	EATING,
 	SLEEPING,
 	DEAD
 }				t_philo_state;
+
+typedef struct s_phil t_phil;
 
 typedef struct s_philos
 {
@@ -44,22 +46,20 @@ typedef struct s_philos
 	int					sleep_ms;
 	int					max_eat;
 
+	pthread_t			*threads_philos; //Malloc Array
+	t_phil				*philos; // Malloc Array
 
-	// Philosopher threads
-	pthread_t			*philos; //M Array
-
-	// mutexes array of all forks phi1 -> fork1
-	pthread_mutex_t		*forks; // Malloc Array,  of locks
-
-	// state of the philosopher
-	t_philo_state		*state; // Malloc Array,  has lock
-	pthread_mutex_t		state_access; // is lock
-
+	// HAS lock
+	t_philo_state		*states; // Malloc Array
 
 	bool				stop_simulation; // true if simulation should stop has lock
-	pthread_mutex_t		stop_sim_access; // is lock
 
-	pthread_mutex_t		print_access; // switch for printing is lock
+	// IS lock
+	pthread_mutex_t		*forks_mtx; // Malloc Array
+
+	pthread_mutex_t		state_mtx;
+	pthread_mutex_t		stop_sim_mtx;
+	pthread_mutex_t		print_mtx;
 
 
 }						t_philos;
@@ -78,27 +78,33 @@ left_fork        right_fork
 */
 
 
-// only poniters to acest the rigt one the momorz managment is in the main thread  
+// only pointers -> memory management in the main thread
 typedef struct s_phil
 {
-	pthread_t			*phil;
+	pthread_t			*thread_phil;
 
+	t_philo_state		*status;
 	pthread_mutex_t		*fork_left;
 	pthread_mutex_t		*fork_right;
 
-	pthread_mutex_t		*print;
 
-	t_philos			*data; // pointer to the main data struct
+	t_philos			*data;
 
 }						t_phil;
 
 
 // auto
+void		*ft_calloc(size_t nelem, size_t elsize);
 size_t		ft_strlen(const char *s);
+int			init_arrays(t_philos *data);
+void		free_arrays(t_philos *data);
+int			init_phil_array(t_philos *data);
 int			main(int argc, char const *argv[]);
+int			init_all_mtx(t_philos *data);
+void		destroy_all_mtx(t_philos *data);
 int			parser(int argc, char const *argv[], t_philos *data);
 void		single(t_philos *data);
-void		start_philos(t_philos *data);
-void		stop_philos(t_philos *data);
+void		create_philos(t_philos *data);
+void		join_philos(t_philos *data);
 
 #endif
