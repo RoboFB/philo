@@ -1,0 +1,21 @@
+
+# tmporary for working
+# *.gitignore
+# docs
+# tester.sh
+
+
+.vscode
+*.json
+*.DS*
+
+# Robin
+*_R_*
+
+# Executables
+*.out
+*.a
+*.o
+
+# philo
+philo
