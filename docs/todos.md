@@ -3,9 +3,10 @@
 
 # Programming:
 -[] parsing
-	-[] check input
-	-[] save input
-	-[] return error
+	-[OK] check input
+	-[OK] save input
+	-[OK] return error
+
 
 -[] threads
 -[] mutex
