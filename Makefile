@@ -6,16 +6,18 @@
 #    By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 10:21:00 by rgohrig           #+#    #+#              #
-#    Updated: 2025/07/25 17:27:23 by rgohrig          ###   ########.fr        #
+#    Updated: 2025/08/01 17:17:03 by rgohrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # ----------------------------- GENERAL ----------------------------------------
 
+# JOBS ?= $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+
 NAME :=			philo
 CC :=			cc
-DEBUG_FLAGS := -g -fsanitize=address,undefined,pointer-compare,pointer-subtract# -g3 -O0 # debug flags
-DEBUG_FLAGS2 := -g -fsanitize=memory,thread# -g3 -O0 # debug flags
+# DEBUG_FLAGS := -g -fsanitize=address,undefined,pointer-compare,pointer-subtract# -g3 -O0 # debug flags
+DEBUG_FLAGS := -g #-fsanitize=thread# -g3 -O0 # debug flags
 CFLAGS :=		-Wall -Werror -Wextra $(DEBUG_FLAGS)# standard flags
 export CFLAGS # set also for the libft
 
@@ -43,7 +45,7 @@ $(DIR_OBJ)/%.o : $(DIR_SRC)/%.c | $(DIR_OBJ)
 # executable
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) -o $@ $^
-	@echo "\n🍽🍝🍽 $@   ($(CFLAGS))\n"
+	@echo "\n🍝🍝🍝 $@   ($(CFLAGS))\n"
 
 # ----------------------------- lazy ------------------------------------------
 

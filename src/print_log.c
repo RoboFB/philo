@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:00:47 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 15:15:11 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:42:16 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 int	print_state(t_phil *phil)
 {
 	int					time_diff;
-	static const char	*msg[] =
-		{"is thinking", "is eating", "is sleeping", "died"};
+	static const char	msg[4][12] =
+		{"is thinking", "is eating", "is sleeping"};
 
-	time_diff = get_time_diff_ms(phil->data);
+	time_diff = get_time_diff_ms(&phil->data->start_time);
 	if (time_diff == ERROR)
 		return (ERROR);
 	pthread_mutex_lock(&phil->data->print_mtx);
@@ -31,11 +31,24 @@ int	print_fork(t_phil *phil)
 {
 	int					time_diff;
 
-	time_diff = get_time_diff_ms(phil->data);
+	time_diff = get_time_diff_ms(&phil->data->start_time);
 	if (time_diff == ERROR)
 		return (ERROR);
 	pthread_mutex_lock(&phil->data->print_mtx);
 	printf("%d %d has taken a fork\n", time_diff, phil->id);
+	pthread_mutex_unlock(&phil->data->print_mtx);
+	return (0);
+}
+
+int	print_dead(t_phil *phil)
+{
+	int					time_diff;
+
+	time_diff = get_time_diff_ms(&phil->data->start_time);
+	if (time_diff == ERROR)
+		return (ERROR);
+	pthread_mutex_lock(&phil->data->print_mtx);
+	printf("%d %d died\n", time_diff, phil->id);
 	pthread_mutex_unlock(&phil->data->print_mtx);
 	return (0);
 }
