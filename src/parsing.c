@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 12:06:44 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/25 17:49:38 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:14:09 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	h_strict_atoi(const char *nptr, int *result)
 	len = 0;
 	negative = 1;
 	if (!nptr || !result)
-		return (-1);
+		return (ERROR);
 	if (*nptr == '-')
 	{
 		negative = -1;
@@ -34,7 +34,7 @@ static int	h_strict_atoi(const char *nptr, int *result)
 	{
 		num = num * 10 + (*nptr - '0') * negative;
 		if (num < INT_MIN || num > INT_MAX)
-			return (-1);
+			return (ERROR);
 		nptr++;
 		len++;
 	}
@@ -65,8 +65,8 @@ int	parser(int argc, char const *argv[], t_philos *data)
 		|| (h_one_arg(argv[4], 0, INT_MAX, &data->sleep_ms) == ERROR))
 		return (ERROR);
 	if (argc == 5)
-		data->max_eat = INT_MAX;
-	else if (h_one_arg(argv[5], 0, INT_MAX, &data->max_eat) == ERROR)
+		data->max_eat_count = INT_MAX;
+	else if (h_one_arg(argv[5], 0, INT_MAX, &data->max_eat_count) == ERROR)
 		return (ERROR);
 	return (0);
 }

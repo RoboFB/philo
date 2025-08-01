@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:38:39 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 15:06:01 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/31 11:49:51 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	init_arrays(t_philos *data)
 	data->forks_mtx = ft_calloc((data->total_philos + 1), sizeof(pthread_mutex_t));
 	data->states = ft_calloc((data->total_philos + 1), sizeof(t_philo_state));
 	data->philos = ft_calloc((data->total_philos + 1), sizeof(t_phil));
-	if (!data->forks_mtx || !data->threads_philos || !data->states || !data->philos)
+	data->timestamp_eaten = ft_calloc((data->total_philos + 1), sizeof(struct timeval));
+	if (!data->forks_mtx || !data->threads_philos || !data->states || !data->philos || !data->timestamp_eaten)
 		return (ERROR);
 	return (0);
 }
@@ -33,10 +34,13 @@ void	free_arrays(t_philos *data)
 		free(data->states);
 	if (data->philos)
 		free(data->philos);
+	if (data->timestamp_eaten)
+		free(data->timestamp_eaten);
 	data->threads_philos = NULL;
 	data->forks_mtx = NULL;
 	data->states = NULL;
 	data->philos = NULL;
+	data->timestamp_eaten = NULL;
 	return ;
 }
 
@@ -47,6 +51,7 @@ int	init_phil_array(t_philos *data)
 	count = 0;
 	while (count < data->total_philos)
 	{
+		data->philos[count].id = count + 1;
 		if (count == 0)
 			data->philos[count].fork_left = data->forks_mtx + data->total_philos - 1;
 		else
@@ -54,7 +59,9 @@ int	init_phil_array(t_philos *data)
 		data->philos[count].fork_right = data->forks_mtx + count;
 		data->philos[count].thread_phil = data->threads_philos + count;
 		data->philos[count].state = data->states + count;
+		data->philos[count].timestamp_eaten = data->timestamp_eaten + count;
 		data->philos[count].data = data;
+		ft_memcpy(&data->timestamp_eaten[count], &data->start_time, sizeof(struct timeval));
 		count++;
 	}
 

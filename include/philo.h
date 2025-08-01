@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 15:06:01 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/01 14:41:52 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ typedef enum e_philo_state
 {
 	THINKING = 0, // init value
 	EATING = 1,
-	SLEEPING = 2,
-	DEAD = 3
+	SLEEPING = 2
 }				t_philo_state;
 
 typedef struct s_phil t_phil;
@@ -44,7 +43,7 @@ typedef struct s_philos
 	int					die_ms;
 	int					eat_ms;
 	int					sleep_ms;
-	int					max_eat;
+	int					max_eat_count;
 	struct timeval		start_time;
 
 	pthread_t			*threads_philos; //Malloc Array
@@ -52,6 +51,7 @@ typedef struct s_philos
 
 	// HAS lock
 	t_philo_state		*states; // Malloc Array
+	struct timeval		*timestamp_eaten; // Malloc Array
 
 	bool				stop_simulation; // true if simulation should stop has lock
 
@@ -59,6 +59,7 @@ typedef struct s_philos
 	pthread_mutex_t		*forks_mtx; // Malloc Array
 
 	pthread_mutex_t		state_mtx;
+	pthread_mutex_t		timestamp_eaten_mtx;
 	pthread_mutex_t		stop_sim_mtx;
 	pthread_mutex_t		print_mtx;
 
@@ -82,10 +83,12 @@ left_fork        right_fork
 // only pointers -> memory management in the main thread
 typedef struct s_phil
 {
-	int					id; // todo init it
+	int					id;
+	int					eat_count;
 	pthread_t			*thread_phil;
 
 	t_philo_state		*state;
+	struct timeval		*timestamp_eaten;
 	pthread_mutex_t		*fork_left;
 	pthread_mutex_t		*fork_right;
 
@@ -97,16 +100,27 @@ typedef struct s_phil
 
 // auto
 void		*ft_calloc(size_t nelem, size_t elsize);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 size_t		ft_strlen(const char *s);
 int			init_arrays(t_philos *data);
 void		free_arrays(t_philos *data);
 int			init_phil_array(t_philos *data);
 int			main(int argc, char const *argv[]);
+int			dead_check(t_philos *data);
+void		monitor(t_philos *data);
 int			init_all_mtx(t_philos *data);
 void		destroy_all_mtx(t_philos *data);
 int			parser(int argc, char const *argv[], t_philos *data);
-void		single(t_philos *data);
+int			print_state(t_phil *phil);
+int			print_fork(t_phil *phil);
+int			print_dead(t_phil *phil);
+int			change_print_state(t_phil *phil, t_philo_state new_state);
+int			take_print_fork(t_phil *phil, pthread_mutex_t *fork);
+void		*single(void *phil_arg);
 void		create_philos(t_philos *data);
 void		join_philos(t_philos *data);
+int			get_time_diff_ms(struct timeval *anchor);
+int			get_time_diff_2_ms(struct timeval *anchor, struct timeval *curr);
+int			sleep_exact_ms(t_philos *data, int ms);
 
 #endif

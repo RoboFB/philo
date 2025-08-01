@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:24:17 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/29 14:38:17 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/07/31 15:01:48 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	main(int argc, char const *argv[])
 	}
 
 	create_philos(&data);
-	printf("Runing\n");
+	monitor(&data);
+	// printf("Runing\n");
 	join_philos(&data);
 
 	destroy_all_mtx(&data);
