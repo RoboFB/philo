@@ -6,13 +6,13 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:40:30 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 17:47:56 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 19:23:51 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	change_print_state(t_phil *phil, t_philo_state new_state)
+int	change_print_state(t_phil *phil, t_print_state new_state)
 {
 	int	return_value;
 	
@@ -51,7 +51,7 @@ int	take_print_fork(t_phil *phil, pthread_mutex_t *fork)
 
 static int	h_think(t_phil *phil)
 {
-	if (change_print_state(phil, THINKING) == ERROR)
+	if (change_print_state(phil, PR_THINKING) == ERROR)
 		return (ERROR);
 	if (phil->id % 2 == 0)
 	{
@@ -74,7 +74,7 @@ static int	h_eat(t_phil *phil)
 {
 	int	return_value;
 
-	if (change_print_state(phil, EATING) == ERROR)
+	if (change_print_state(phil, PR_EATING) == ERROR)
 		return (ERROR);
 	return_value = 0;
 	pthread_mutex_lock(&phil->data->eat_mtxs);
@@ -88,7 +88,7 @@ static int	h_eat(t_phil *phil)
 }
 static int	h_sleep(t_phil *phil)
 {
-	if (change_print_state(phil, SLEEPING) == ERROR)
+	if (change_print_state(phil, PR_SLEEPING) == ERROR)
 		return (ERROR);
 	if (sleep_exact_ms(phil->data, phil->data->sleep_ms) == ERROR)
 		return (ERROR);

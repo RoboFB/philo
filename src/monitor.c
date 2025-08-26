@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:01:55 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 18:58:02 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 19:23:57 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int h_stop_check(t_data *data)
 		{
 			h_stop_sim(data);
 			pthread_mutex_unlock(&data->eat_mtxs[idx]);
-			print_dead(&data->philos[idx]);
+			print_state(&data->philos[idx], PR_DEAD);
 			return (1);
 		}
 		if (data->eat_counts[idx] <= data->max_eat_count)

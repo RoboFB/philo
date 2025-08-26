@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 18:09:08 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 19:24:23 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@
 typedef int		t_ms;
 
 
-typedef enum e_philo_state
+typedef enum e_print_state
 {
-	THINKING = 0, // init value
-	EATING = 1,
-	SLEEPING = 2
-}				t_philo_state;
+	PR_THINKING = 0, // init value
+	PR_EATING = 1,
+	PR_SLEEPING = 2,
+	PR_DEAD = 3,
+	PR_FORK = 4
+}				t_print_state;
 
 typedef struct s_phil t_phil;
 
@@ -132,15 +134,12 @@ void		free_arrays(t_data *data);
 void		init_data(t_data *data);
 void		init_phil_pointer(t_data *data);
 int			main(int argc, char const *argv[]);
-int			dead_check(t_data *data);
 void		monitor(t_data *data);
 int			init_mtxs(t_data *data);
 void		destroy_mtxs(t_data *data);
 int			parser(int argc, char const *argv[], t_data *data);
-int			print_state(t_phil *phil);
-int			print_fork(t_phil *phil);
-int			print_dead(t_phil *phil);
-int			change_print_state(t_phil *phil, t_philo_state new_state);
+void		print_state(t_phil *phil, t_print_state state);
+int			change_print_state(t_phil *phil, t_print_state new_state);
 int			take_print_fork(t_phil *phil, pthread_mutex_t *fork);
 void		*single(void *phil_arg);
 void		create_philos(t_data *data);
