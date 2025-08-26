@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/01 14:41:52 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:53:49 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,17 @@ typedef enum e_philo_state
 
 typedef struct s_phil t_phil;
 
-typedef struct s_philos
+
+// prof of concept vielleicht?
+// typedef struct s_save_x
+// {
+// 	pthread_mutex_t		mtx;
+// 	int					value;
+
+// }						t_save_x;
+
+
+typedef struct s_data
 {
 	// General data for all philosophers
 	int					total_philos;
@@ -46,25 +56,34 @@ typedef struct s_philos
 	int					max_eat_count;
 	struct timeval		start_time;
 
+
+
+	// General data for all philos
 	pthread_t			*threads_philos; //Malloc Array
 	t_phil				*philos; // Malloc Array
 
-	// HAS lock
-	t_philo_state		*states; // Malloc Array
-	struct timeval		*timestamp_eaten; // Malloc Array
 
-	bool				stop_simulation; // true if simulation should stop has lock
+	// DATA for single philos
 
-	// IS lock
-	pthread_mutex_t		*forks_mtx; // Malloc Array
+	// HAS No lock
+	int					*ids; // Malloc Array                init: data
 
-	pthread_mutex_t		state_mtx;
-	pthread_mutex_t		timestamp_eaten_mtx;
-	pthread_mutex_t		stop_sim_mtx;
-	pthread_mutex_t		print_mtx;
+	
+	// HAS lock + lock
+	struct timeval		*eat_timestamps; // Malloc Array      init: data
+	int					*eat_counts; // Malloc Array         (init): 0
+	pthread_mutex_t		*eat_mtxs; // Malloc Array           init: mtx
+	
+	bool				*forks; // Malloc Array               (init): 0/false
+	pthread_mutex_t		*forks_mtxs; // Malloc Array          init: mtx
+	
+	bool				stop_simulation; // true if simulation should stop has lock    (init:) 0/false
+	pthread_mutex_t		stop_sim_mtx; //                    init: mtx
+
+	pthread_mutex_t		print_mtx; //                       init: mtx
 
 
-}						t_philos;
+}						t_data;
 
 
 
@@ -83,17 +102,23 @@ left_fork        right_fork
 // only pointers -> memory management in the main thread
 typedef struct s_phil
 {
-	int					id;
-	int					eat_count;
-	pthread_t			*thread_phil;
 
-	t_philo_state		*state;
-	struct timeval		*timestamp_eaten;
-	pthread_mutex_t		*fork_left;
-	pthread_mutex_t		*fork_right;
+	// Has no Lock
+	int					*id;
+	
+	// HAS lock + lock
+	struct timeval		*eat_timestamp;
+	int					*eat_count;
+	pthread_mutex_t		*eat_mtx;
 
+	bool				*fork_left;
+	pthread_mutex_t		*fork_left_mtx;
 
-	t_philos			*data;
+	bool				*fork_right;
+	pthread_mutex_t		*fork_right_mtx;
+
+	// back link
+	t_data				*data;
 
 }						t_phil;
 
@@ -102,25 +127,26 @@ typedef struct s_phil
 void		*ft_calloc(size_t nelem, size_t elsize);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 size_t		ft_strlen(const char *s);
-int			init_arrays(t_philos *data);
-void		free_arrays(t_philos *data);
-int			init_phil_array(t_philos *data);
+int			init_arrays(t_data *data);
+void		free_arrays(t_data *data);
+void		init_data(t_data *data);
+void		init_phil_pointer(t_data *data);
 int			main(int argc, char const *argv[]);
-int			dead_check(t_philos *data);
-void		monitor(t_philos *data);
-int			init_all_mtx(t_philos *data);
-void		destroy_all_mtx(t_philos *data);
-int			parser(int argc, char const *argv[], t_philos *data);
+int			dead_check(t_data *data);
+void		monitor(t_data *data);
+int			init_mtxs(t_data *data);
+void		destroy_mtxs(t_data *data);
+int			parser(int argc, char const *argv[], t_data *data);
 int			print_state(t_phil *phil);
 int			print_fork(t_phil *phil);
 int			print_dead(t_phil *phil);
 int			change_print_state(t_phil *phil, t_philo_state new_state);
 int			take_print_fork(t_phil *phil, pthread_mutex_t *fork);
 void		*single(void *phil_arg);
-void		create_philos(t_philos *data);
-void		join_philos(t_philos *data);
+void		create_philos(t_data *data);
+void		join_philos(t_data *data);
 int			get_time_diff_ms(struct timeval *anchor);
 int			get_time_diff_2_ms(struct timeval *anchor, struct timeval *curr);
-int			sleep_exact_ms(t_philos *data, int ms);
+int			sleep_exact_ms(t_data *data, int ms);
 
 #endif
