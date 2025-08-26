@@ -6,45 +6,53 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:01:55 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 17:47:18 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 18:58:02 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-int dead_check(t_data *data)
+static void h_stop_sim(t_data *data)
 {
-	int				count;
-	struct timeval	curr;
+	pthread_mutex_lock(&data->stop_sim_mtx);
+	data->stop_simulation = true;
+	pthread_mutex_unlock(&data->stop_sim_mtx);
+	return ;
+}
 
-	(void)gettimeofday(&curr, NULL);
+// R: (0)ok  (1)stop dead   (2)stop all eaten
+static int h_stop_check(t_data *data)
+{
+	int				idx;
+	int				finished_melees;
+	struct timeval	timestamp;
 
-	pthread_mutex_lock(&data->eat_mtxs);
-	count = 0;
-	while (count < data->total_philos)
+	(void)gettimeofday(&timestamp, NULL);
+	finished_melees = 0;
+	idx = 0;
+	while (idx < data->total_philos)
 	{
-		if (data->die_ms < get_time_diff_2_ms(&data->eat_timestamps[count], &curr))
+		pthread_mutex_lock(&data->eat_mtxs[idx]);
+		if (get_time_diff_2_ms(&data->eat_timestamps[idx], &timestamp) > data->die_ms)
 		{
-			pthread_mutex_unlock(&data->eat_mtxs);
-			pthread_mutex_lock(&data->stop_sim_mtx);
-			data->stop_simulation = true;
-			pthread_mutex_unlock(&data->stop_sim_mtx);
-			print_dead(&data->philos[count]);
+			h_stop_sim(data);
+			pthread_mutex_unlock(&data->eat_mtxs[idx]);
+			print_dead(&data->philos[idx]);
 			return (1);
 		}
-		count++;
+		if (data->eat_counts[idx] <= data->max_eat_count)
+			finished_melees++;
+		pthread_mutex_unlock(&data->eat_mtxs[idx]);
+		idx++;
 	}
-	pthread_mutex_unlock(&data->eat_mtxs);
+	if (finished_melees == data->total_philos)
+		return (h_stop_sim(data), 2);
 	return (0);
 }
 
 void monitor(t_data *data)
 {
-	while (dead_check(data) == 0)
-	{
-		if (sleep_exact_ms(data, 1) == ERROR)
-			return ;
-	}
+	while (h_stop_check(data) == 0)
+		usleep(500);
 	return ;
 }
