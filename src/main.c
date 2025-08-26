@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:24:17 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/07/31 15:01:48 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 18:25:53 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,35 @@
 
 int	main(int argc, char const *argv[])
 {
-	t_philos		data;
+	t_data		data;
 
 
-	memset(&data, 0, sizeof(t_philos));
-	if (gettimeofday(&data.start_time, NULL) == ERROR)
-	{
-		printf("Error: gettimeofday failed\n");
-		return (EXIT_FAILURE);
-	}
+	memset(&data, 0, sizeof(t_data));
+	(void)gettimeofday(&data.start_time, NULL);
 	if (parser(argc, argv, &data) == ERROR)
 	{
 		printf("Error: Invalid arguments.\n");
 		return (EXIT_FAILURE);
 	}
-
-	if (init_arrays(&data) == ERROR || init_phil_array(&data) == ERROR)
+	if (init_arrays(&data) == ERROR)
 	{
 		printf("Error: Failed to initialize arrays.\n");
 		free_arrays(&data);
 		return (EXIT_FAILURE);
 	}
-	if (init_all_mtx(&data) == ERROR)
+	init_phil_pointer(&data);
+	init_data(&data);
+	if (init_mtxs(&data) == ERROR)
 	{
-		printf("Error: Failed to initialize forks.\n");
-		destroy_all_mtx(&data);
+		printf("Error: Failed to initialize mutexes.\n");
+		destroy_mtxs(&data);
 		free_arrays(&data);
 		return (EXIT_FAILURE);
 	}
-
 	create_philos(&data);
 	monitor(&data);
-	// printf("Runing\n");
 	join_philos(&data);
-
-	destroy_all_mtx(&data);
+	destroy_mtxs(&data);
 	free_arrays(&data);
 	return (EXIT_SUCCESS);
 }
-
