@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 17:53:49 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 18:09:08 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_data
 	int					*eat_counts; // Malloc Array         (init): 0
 	pthread_mutex_t		*eat_mtxs; // Malloc Array           init: mtx
 	
-	bool				*forks; // Malloc Array               (init): 0/false
+	bool				*forks; // Malloc Array               (init): 0/false/not taken
 	pthread_mutex_t		*forks_mtxs; // Malloc Array          init: mtx
 	
 	bool				stop_simulation; // true if simulation should stop has lock    (init:) 0/false

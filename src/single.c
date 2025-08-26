@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:40:30 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/01 16:50:55 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/26 17:47:56 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,11 @@ int	change_print_state(t_phil *phil, t_philo_state new_state)
 	return_value = 0;
 	pthread_mutex_lock(&phil->data->stop_sim_mtx);
 	if (phil->data->stop_simulation)
-		return_value = 1;
+		return_value = ERROR;
 	pthread_mutex_unlock(&phil->data->stop_sim_mtx);
 
 	if (return_value == 0)
 	{
-		pthread_mutex_lock(&phil->data->state_mtx);
-		*phil->state = new_state;
-		pthread_mutex_unlock(&phil->data->state_mtx);
 		print_state(phil);
 	}
 	return (return_value);
@@ -39,7 +36,8 @@ int	take_print_fork(t_phil *phil, pthread_mutex_t *fork)
 	
 	return_value = 0;
 	pthread_mutex_lock(&phil->data->stop_sim_mtx);
-	return_value = phil->data->stop_simulation *-1;
+	if (phil->data->stop_simulation)
+		return_value = ERROR;
 	pthread_mutex_unlock(&phil->data->stop_sim_mtx);
 
 	if (return_value == 0)
@@ -60,14 +58,14 @@ static int	h_think(t_phil *phil)
 		if (phil->eat_count == 0
 			&& sleep_exact_ms(phil->data, (phil->data->eat_ms) / 2) == ERROR)
 			return (ERROR);
-		if (take_print_fork(phil, phil->fork_left) == ERROR
-			|| take_print_fork(phil, phil->fork_right) == ERROR)
+		if (take_print_fork(phil, phil->fork_left_mtx) == ERROR
+			|| take_print_fork(phil, phil->fork_right_mtx) == ERROR)
 			return (ERROR);
 	}
 	else
 	{
-		if (take_print_fork(phil, phil->fork_right) == ERROR
-		|| take_print_fork(phil, phil->fork_left) == ERROR)
+		if (take_print_fork(phil, phil->fork_right_mtx) == ERROR
+		|| take_print_fork(phil, phil->fork_left_mtx) == ERROR)
 		return (ERROR);
 	}
 	return (0);
@@ -79,17 +77,13 @@ static int	h_eat(t_phil *phil)
 	if (change_print_state(phil, EATING) == ERROR)
 		return (ERROR);
 	return_value = 0;
-	pthread_mutex_lock(&phil->data->timestamp_eaten_mtx);
-	if (gettimeofday(phil->timestamp_eaten, NULL) == ERROR)
-	{
-		write(2, "Error: gettimeofday failed\n", 28);
-		return_value = ERROR;
-	}
-	pthread_mutex_unlock(&phil->data->timestamp_eaten_mtx);
+	pthread_mutex_lock(&phil->data->eat_mtxs);
+	(void)gettimeofday(phil->eat_timestamp, NULL);
+	pthread_mutex_unlock(&phil->data->eat_mtxs);
 	if (sleep_exact_ms(phil->data, phil->data->eat_ms) == ERROR)
 		return_value = ERROR;
-	pthread_mutex_unlock(phil->fork_right);
-	pthread_mutex_unlock(phil->fork_left);
+	pthread_mutex_unlock(phil->fork_right_mtx);
+	pthread_mutex_unlock(phil->fork_left_mtx);
 	return (return_value);
 }
 static int	h_sleep(t_phil *phil)

@@ -16,6 +16,7 @@
 - [ ] 1 philo test if fork left == right thaen make spacel and error/exit
 - [ ] timing is ov somehowe check it
 - [ ] improve error hadeling and clean the logig up
+- [ ] printf errors in writtes to stderr (2) umwandeln
 - [ ] clean up code
 
 
