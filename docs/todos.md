@@ -118,3 +118,45 @@ time_to_sleep -> how long sleep
 6. style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 7. perf: A code change that improves performance
 8. test: Adding missing tests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- [] Norm
+- [] no leaks
+- [] no crash, no undefined behavior
+- [] no Global variables
+- [] one thread per philosopher
+- [] only one fork per philosopher
+- [] a mutex per fork and that it's used to check the fork value and/or change
+- [] outputs are never mixed
+- []
+- []
+- []
+- []
+
+
+
+
+
+Check how the death of a philosopher is verified and if there is a mutex to prevent a philosopher from dying and starting eating at the same time.
+
+Do not test with more than 200 philosophers.
+Do not test with time_to_die or time_to_eat or time_to_sleep set to values lower than 60 ms.
+Test 1 800 200 200. The philosopher should not eat and should die.
+Test 5 800 200 200. No philosopher should die.
+Test 5 800 200 200 7. No philosopher should die and the simulation should stop when every philosopher has eaten at least 7 times.
+Test 4 410 200 200. No philosopher should die.
+Test 4 310 200 100. One philosopher should die.
+Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is unacceptable.
+Test with any values of your choice to verify all the requirements. Ensure philosophers die at the right time, that they don't steal forks, and so forth.
