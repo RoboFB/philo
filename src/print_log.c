@@ -6,70 +6,45 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:00:47 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 19:23:25 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/29 16:23:48 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void	print_state(t_phil *phil, t_philo_state state)
-// {
-// 	int					time_ms;
-// 	static const char	msg[3][12] =
-// 		{"is thinking", "is eating", "is sleeping"};
-
-// 	time_ms = get_time_diff_ms(&phil->data->start_time);
-// 	pthread_mutex_lock(&phil->data->print_mtx);
-// 	printf("%d %d %s\n", time_ms, phil->id, msg[state]);
-// 	pthread_mutex_unlock(&phil->data->print_mtx);
-// 	return (0);
-// }
-
-// void	print_fork(t_phil *phil)
-// {
-// 	int					time_ms;
-
-// 	time_ms = get_time_diff_ms(&phil->data->start_time);
-// 	pthread_mutex_lock(&phil->data->print_mtx);
-// 	printf("%d %d has taken a fork\n", time_ms, phil->id);
-// 	pthread_mutex_unlock(&phil->data->print_mtx);
-// 	return ;
-// }
-
-// void	print_dead(t_phil *phil)
-// {
-// 	int					time_ms;
-
-// 	time_ms = get_time_diff_ms(&phil->data->start_time);
-// 	pthread_mutex_lock(&phil->data->print_mtx);
-// 	printf("%d %d died\n", time_ms, phil->id);
-// 	pthread_mutex_unlock(&phil->data->print_mtx);
-// 	return ;
-// }
-
-
-// void	print_state(t_phil *phil, t_philo_state state)
-// {
-// 	int					time_ms;
-// 	static const char	msg[3][12] =
-// 		{"is thinking", "is eating", "is sleeping"};
-
-// 	time_ms = get_time_diff_ms(&phil->data->start_time);
-// 	pthread_mutex_lock(&phil->data->print_mtx);
-// 	printf("%d %d %s\n", time_ms, phil->id, msg[state]);
-// 	pthread_mutex_unlock(&phil->data->print_mtx);
-// 	return (0);
-// }
-
-void	print_state(t_phil *phil, t_print_state state)
+int	check_print(t_phil *phil, t_print_state new_state)
 {
 	int					time_ms;
 	static const char	msg[5][17] =
 		{"is thinking", "is eating", "is sleeping", "died", "has taken a fork"};
 
-	time_ms = get_time_diff_ms(&phil->data->start_time);
 	pthread_mutex_lock(&phil->data->print_mtx);
-	printf("%d %d %s\n", time_ms, *phil->id, msg[state]);
+	if (check_stop_sim(phil->data) == ERROR)
+	{
+		pthread_mutex_unlock(&phil->data->print_mtx);
+		return (ERROR);
+	}
+	time_ms = get_time_diff_ms(&phil->data->start_time);
+	printf("%d %d %s\n", time_ms, *phil->id, msg[new_state]);
+	pthread_mutex_unlock(&phil->data->print_mtx);
+	return (0);
+}
+
+void	print_max_meal(t_data *data)
+{
+	pthread_mutex_lock(&data->print_mtx);
+	printf("All Philos eaten at least %d meals\n", data->max_eat_count);
+	pthread_mutex_unlock(&data->print_mtx);
+	return ;
+}
+
+void	print_death(t_phil *phil)
+{
+	int					time_ms;
+
+	pthread_mutex_lock(&phil->data->print_mtx);
+	time_ms = get_time_diff_ms(&phil->data->start_time);
+	printf("%d %d died\n", time_ms, *phil->id);
 	pthread_mutex_unlock(&phil->data->print_mtx);
 	return ;
 }
