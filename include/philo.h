@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 19:24:23 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/28 17:04:43 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,18 +134,22 @@ void		free_arrays(t_data *data);
 void		init_data(t_data *data);
 void		init_phil_pointer(t_data *data);
 int			main(int argc, char const *argv[]);
+void		set_stop_sim(t_data *data);
+int			check_stop_sim(t_data *data);
 void		monitor(t_data *data);
 int			init_mtxs(t_data *data);
 void		destroy_mtxs(t_data *data);
 int			parser(int argc, char const *argv[], t_data *data);
-void		print_state(t_phil *phil, t_print_state state);
-int			change_print_state(t_phil *phil, t_print_state new_state);
-int			take_print_fork(t_phil *phil, pthread_mutex_t *fork);
+int			check_print(t_phil *phil, t_print_state new_state);
+void		print_max_meal(t_data *data);
+void		print_death(t_phil *phil);
 void		*single(void *phil_arg);
 void		create_philos(t_data *data);
 void		join_philos(t_data *data);
 int			get_time_diff_ms(struct timeval *anchor);
 int			get_time_diff_2_ms(struct timeval *anchor, struct timeval *curr);
 int			sleep_exact_ms(t_data *data, int ms);
+int			take_print_fork(t_phil *phil, pthread_mutex_t *fork_mtx, bool *fork);
+void		release_forks(t_phil *phil);
 
 #endif

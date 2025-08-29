@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:24:17 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 18:25:53 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/08/28 16:14:21 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int argc, char const *argv[])
 {
 	t_data		data;
-
 
 	memset(&data, 0, sizeof(t_data));
 	(void)gettimeofday(&data.start_time, NULL);

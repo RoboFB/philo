@@ -6,7 +6,7 @@
 #    By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/10 10:21:00 by rgohrig           #+#    #+#              #
-#    Updated: 2025/08/01 17:17:03 by rgohrig          ###   ########.fr        #
+#    Updated: 2025/08/29 13:34:08 by rgohrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 NAME :=			philo
 CC :=			cc
 # DEBUG_FLAGS := -g -fsanitize=address,undefined,pointer-compare,pointer-subtract# -g3 -O0 # debug flags
-DEBUG_FLAGS := -g #-fsanitize=thread# -g3 -O0 # debug flags
+DEBUG_FLAGS := -g# -fsanitize=thread# -g3 -O0 # debug flags
 CFLAGS :=		-Wall -Werror -Wextra $(DEBUG_FLAGS)# standard flags
 export CFLAGS # set also for the libft
 
