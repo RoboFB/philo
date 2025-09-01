@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:38:39 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 18:01:36 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 15:38:14 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,9 @@ int	init_arrays(t_data *data)
 	data->forks_mtxs = ft_calloc((data->total_philos), sizeof(
 				pthread_mutex_t));
 
-	if (!data->threads_philos
-		|| !data->philos
-		|| !data->ids
-		|| !data->eat_timestamps
-		|| !data->eat_counts
-		|| !data->eat_mtxs
-		|| !data->forks
-		|| !data->forks_mtxs)
+	if (!data->threads_philos || !data->philos || !data->ids
+		|| !data->eat_timestamps || !data->eat_counts ||
+		!data->eat_mtxs || !data->forks || !data->forks_mtxs)
 		return (ERROR);
 	return (0);
 }
@@ -80,7 +75,8 @@ void init_data(t_data *data)
 	while (count < data->total_philos)
 	{
 		data->ids[count] = count + 1;
-		ft_memcpy(&data->eat_timestamps[count], &data->start_time, sizeof(struct timeval));
+		ft_memcpy(&data->eat_timestamps[count], &data->start_time,
+			sizeof(struct timeval));
 		count++;
 	}
 	return ;
