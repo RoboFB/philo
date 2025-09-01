@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:40:30 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/29 15:56:55 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 13:30:14 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ static int	h_think(t_phil *phil)
 // R: (0)Normal  (-1)stop sim
 static int	h_forks(t_phil *phil)
 {
+	pthread_mutex_lock(phil->eat_mtx);
+	if (*phil->eat_count == 0 && *phil->id % 2 == 0)
+		usleep(5000);
+	pthread_mutex_unlock(phil->eat_mtx);
 	if (*phil->id % 2 == 0 && phil->data->total_philos % 2 == 0)
 	{
 		if (take_print_fork(phil, phil->fork_left_mtx, phil->fork_left) == ERROR
@@ -78,6 +82,8 @@ void	*single(void *phil_arg)
 	t_phil	*phil;
 
 	phil = (t_phil *)phil_arg;
+	// if (*phil->id % 2 == 0)
+	// 	usleep(4000);
 	while (1)
 		if (h_think(phil) == ERROR
 			|| h_forks(phil) == ERROR
