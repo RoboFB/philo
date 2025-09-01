@@ -18,6 +18,8 @@
 - [ ] improve error hadeling and clean the logig up
 - [ ] printf errors in writtes to stderr (2) umwandeln
 - [ ] clean up code
+- [ ] ./philo 199 190 60 60 50
+- [ ] ./philo 200 130 60 60 50
 
 
 

@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:38:39 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 15:38:14 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 16:03:57 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ int	init_arrays(t_data *data)
 				bool));
 	data->forks_mtxs = ft_calloc((data->total_philos), sizeof(
 				pthread_mutex_t));
-
 	if (!data->threads_philos || !data->philos || !data->ids
-		|| !data->eat_timestamps || !data->eat_counts ||
-		!data->eat_mtxs || !data->forks || !data->forks_mtxs)
+		|| !data->eat_timestamps || !data->eat_counts
+		|| !data->eat_mtxs || !data->forks || !data->forks_mtxs)
 		return (ERROR);
 	return (0);
 }
@@ -67,7 +66,7 @@ void	free_arrays(t_data *data)
 	return ;
 }
 
-void init_data(t_data *data)
+void	init_data(t_data *data)
 {
 	int		count;
 
@@ -94,11 +93,13 @@ void	init_phil_pointer(t_data *data)
 		data->philos[count].eat_count = data->eat_counts + count;
 		data->philos[count].eat_mtx = data->eat_mtxs + count;
 		if (count == 0)
-			data->philos[count].fork_left = data->forks + data->total_philos - 1;
+			data->philos[count].fork_left
+				= data->forks + data->total_philos - 1;
 		else
 			data->philos[count].fork_left = data->forks + count - 1;
 		if (count == 0)
-			data->philos[count].fork_left_mtx = data->forks_mtxs + data->total_philos - 1;
+			data->philos[count].fork_left_mtx
+				= data->forks_mtxs + data->total_philos - 1;
 		else
 			data->philos[count].fork_left_mtx = data->forks_mtxs + count - 1;
 		data->philos[count].fork_right = data->forks + count;

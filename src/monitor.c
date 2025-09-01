@@ -6,13 +6,13 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:01:55 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 15:40:29 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 16:34:21 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void set_stop_sim(t_data *data)
+void	set_stop_sim(t_data *data)
 {
 	// pthread_mutex_lock(&data->print_mtx);// ?
 	pthread_mutex_lock(&data->stop_sim_mtx);
@@ -36,7 +36,7 @@ int	check_stop_sim(t_data *data)
 }
 
 // R: (0)ok  (1)stop dead   (2)stop all eaten
-static int h_stop_check(t_data *data)
+static int	h_stop_check(t_data *data)
 {
 	int				idx;
 	int				finished_melees;
@@ -48,13 +48,10 @@ static int h_stop_check(t_data *data)
 	{
 		pthread_mutex_lock(&data->eat_mtxs[idx]);
 		(void)gettimeofday(&timestamp, NULL);
-		if (get_time_diff_2_ms(&data->eat_timestamps[idx], &timestamp) > data->die_ms)
-		{
-			set_stop_sim(data);
-			print_death(&data->philos[idx]);
-			pthread_mutex_unlock(&data->eat_mtxs[idx]);
-			return (1);
-		}
+		if (get_time_diff_2_ms(&data->eat_timestamps[idx], &timestamp)
+			>= data->die_ms)
+			return (set_stop_sim(data), print_death(&data->philos[idx]),
+				pthread_mutex_unlock(&data->eat_mtxs[idx]), 1);
 		if (data->eat_counts[idx] >= data->max_eat_count)
 			finished_melees++;
 		pthread_mutex_unlock(&data->eat_mtxs[idx]);
@@ -65,7 +62,7 @@ static int h_stop_check(t_data *data)
 	return (0);
 }
 
-void monitor(t_data *data)
+void	monitor(t_data *data)
 {
 	while (h_stop_check(data) == 0)
 		usleep(100);

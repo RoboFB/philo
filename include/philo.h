@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/28 17:04:43 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 16:36:16 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,20 @@
 
 # define ERROR -1
 
-typedef int		t_ms;
-
+typedef struct s_phil	t_phil;
+typedef int				t_ms;
 
 typedef enum e_print_state
 {
-	PR_THINKING = 0, // init value
+	PR_THINKING = 0,
 	PR_EATING = 1,
 	PR_SLEEPING = 2,
 	PR_DEAD = 3,
 	PR_FORK = 4
 }				t_print_state;
 
-typedef struct s_phil t_phil;
-
-
-// prof of concept vielleicht?
-// typedef struct s_save_x
-// {
-// 	pthread_mutex_t		mtx;
-// 	int					value;
-
-// }						t_save_x;
-
-
 typedef struct s_data
 {
-	// General data for all philosophers
 	int					total_philos;
 	int					die_ms;
 	int					eat_ms;
@@ -58,57 +45,29 @@ typedef struct s_data
 	int					max_eat_count;
 	struct timeval		start_time;
 
+	pthread_t			*threads_philos;
+	t_phil				*philos;
+	int					*ids;
 
+	struct timeval		*eat_timestamps;
+	int					*eat_counts;
+	pthread_mutex_t		*eat_mtxs;
 
-	// General data for all philos
-	pthread_t			*threads_philos; //Malloc Array
-	t_phil				*philos; // Malloc Array
+	bool				*forks;
+	pthread_mutex_t		*forks_mtxs;
 
+	bool				stop_simulation;
+	pthread_mutex_t		stop_sim_mtx;
 
-	// DATA for single philos
-
-	// HAS No lock
-	int					*ids; // Malloc Array                init: data
-
-	
-	// HAS lock + lock
-	struct timeval		*eat_timestamps; // Malloc Array      init: data
-	int					*eat_counts; // Malloc Array         (init): 0
-	pthread_mutex_t		*eat_mtxs; // Malloc Array           init: mtx
-	
-	bool				*forks; // Malloc Array               (init): 0/false/not taken
-	pthread_mutex_t		*forks_mtxs; // Malloc Array          init: mtx
-	
-	bool				stop_simulation; // true if simulation should stop has lock    (init:) 0/false
-	pthread_mutex_t		stop_sim_mtx; //                    init: mtx
-
-	pthread_mutex_t		print_mtx; //                       init: mtx
-
+	pthread_mutex_t		print_mtx;
 
 }						t_data;
-
-
-
-/*
-left_fork        right_fork
-  last -> phi1 -> fork1
- fork1 -> phi2 -> fork2
- fork2 -> phi3 -> fork3
- fork3 -> phi4 -> fork4
- fork4 -> phi5 -> fork5
- ...      ...      ...
-
-*/
-
 
 // only pointers -> memory management in the main thread
 typedef struct s_phil
 {
-
-	// Has no Lock
 	int					*id;
-	
-	// HAS lock + lock
+
 	struct timeval		*eat_timestamp;
 	int					*eat_count;
 	pthread_mutex_t		*eat_mtx;
@@ -119,11 +78,9 @@ typedef struct s_phil
 	bool				*fork_right;
 	pthread_mutex_t		*fork_right_mtx;
 
-	// back link
 	t_data				*data;
 
 }						t_phil;
-
 
 // auto
 void		*ft_calloc(size_t nelem, size_t elsize);
@@ -141,7 +98,6 @@ int			init_mtxs(t_data *data);
 void		destroy_mtxs(t_data *data);
 int			parser(int argc, char const *argv[], t_data *data);
 int			check_print(t_phil *phil, t_print_state new_state);
-void		print_max_meal(t_data *data);
 void		print_death(t_phil *phil);
 void		*single(void *phil_arg);
 void		create_philos(t_data *data);

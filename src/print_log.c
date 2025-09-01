@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:00:47 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 15:40:56 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 16:25:47 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 int	check_print(t_phil *phil, t_print_state new_state)
 {
 	int					time_ms;
-	static const char	msg[5][17] =
-		{"is thinking", "is eating", "is sleeping", "died", "has taken a fork"};
+	static const char	msg[5][17]
+		= {"is thinking", "is eating", "is sleeping",
+		"died", "has taken a fork"};
 
 	pthread_mutex_lock(&phil->data->print_mtx);
 	if (check_stop_sim(phil->data) == ERROR)
