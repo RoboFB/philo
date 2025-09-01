@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 14:00:47 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/29 16:23:48 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 15:40:56 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ int	check_print(t_phil *phil, t_print_state new_state)
 	printf("%d %d %s\n", time_ms, *phil->id, msg[new_state]);
 	pthread_mutex_unlock(&phil->data->print_mtx);
 	return (0);
-}
-
-void	print_max_meal(t_data *data)
-{
-	pthread_mutex_lock(&data->print_mtx);
-	printf("All Philos eaten at least %d meals\n", data->max_eat_count);
-	pthread_mutex_unlock(&data->print_mtx);
-	return ;
 }
 
 void	print_death(t_phil *phil)
