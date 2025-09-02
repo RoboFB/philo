@@ -12,14 +12,14 @@
 - [x] mutex
 - [x] philes
 - [x] print logs
-- [ ] error handeling
-- [ ] 1 philo test if fork left == right thaen make spacel and error/exit
-- [ ] timing is ov somehowe check it
-- [ ] improve error hadeling and clean the logig up
-- [ ] printf errors in writtes to stderr (2) umwandeln
-- [ ] clean up code
-- [ ] ./philo 199 190 60 60 50
-- [ ] ./philo 200 130 60 60 50
+- [x] error handeling
+- [x] 1 philo test if fork left == right thaen make spacel and error/exit
+- [x] timing is ov somehowe check it
+- [x] improve error hadeling and clean the logig up
+- [x] printf errors in writtes to stderr (2) umwandeln
+- [x] clean up code
+- [x] ./philo 199 190 60 60 50
+- [x] ./philo 200 130 60 60 50
 
 
 
@@ -125,40 +125,15 @@ time_to_sleep -> how long sleep
 
 
 
-
-
-
-
-
-
-
-
-
-- [] Norm
-- [] no leaks
-- [] no crash, no undefined behavior
-- [] no Global variables
-- [] one thread per philosopher
-- [] only one fork per philosopher
-- [] a mutex per fork and that it's used to check the fork value and/or change
-- [] outputs are never mixed
+- [OK] Norm
+- [OK] no leaks
+- [OK] no crash, no undefined behavior
+- [OK] no Global variables
+- [OK] one thread per philosopher
+- [OK] only one fork per philosopher
+- [OK] a mutex per fork and that it's used to check the fork value and/or change
+- [OK] outputs are never mixed
+- [OK] makefile clean
+- [] docs removed
+- [] add philo/philo dir
 - []
-- []
-- []
-- []
-
-
-
-
-
-Check how the death of a philosopher is verified and if there is a mutex to prevent a philosopher from dying and starting eating at the same time.
-
-Do not test with more than 200 philosophers.
-Do not test with time_to_die or time_to_eat or time_to_sleep set to values lower than 60 ms.
-Test 1 800 200 200. The philosopher should not eat and should die.
-Test 5 800 200 200. No philosopher should die.
-Test 5 800 200 200 7. No philosopher should die and the simulation should stop when every philosopher has eaten at least 7 times.
-Test 4 410 200 200. No philosopher should die.
-Test 4 310 200 100. One philosopher should die.
-Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is unacceptable.
-Test with any values of your choice to verify all the requirements. Ensure philosophers die at the right time, that they don't steal forks, and so forth.

@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:17:46 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 22:09:37 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/02 16:42:19 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef enum e_print_state
 	PR_FORK = 4
 }				t_print_state;
 
+// all the data for the simulation
 typedef struct s_data
 {
 	int					total_philos;
@@ -81,7 +82,6 @@ typedef struct s_phil
 	t_data				*data;
 
 }						t_phil;
-
 
 void		*ft_calloc(size_t nelem, size_t elsize);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
