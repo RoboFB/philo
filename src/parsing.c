@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 12:06:44 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/08/26 16:12:31 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 21:16:56 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	h_one_arg(char const *input, int min, int max, int *out)
 }
 
 // R: (0)ok  (-1)Error   | parses argc and argv
-int	parser(int argc, char const *argv[], t_data *data)
+int	parser(t_data *data, int argc, char const *argv[])
 {
 	if (argc != 5 && argc != 6)
 		return (ERROR);

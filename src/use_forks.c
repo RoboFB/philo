@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:11:02 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 16:05:12 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 22:35:05 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	take_print_fork(t_phil *phil, pthread_mutex_t *fork_mtx, bool *fork)
 	return (check_print(phil, PR_FORK));
 }
 
-// R: void
 void	release_forks(t_phil *phil)
 {
 	pthread_mutex_lock(phil->fork_right_mtx);

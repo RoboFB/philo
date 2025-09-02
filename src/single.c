@@ -6,7 +6,7 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 16:40:30 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 16:23:15 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 20:23:17 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	h_eat(t_phil *phil)
 	pthread_mutex_lock(phil->eat_mtx);
 	if (check_stop_sim(phil->data) == ERROR)
 		return (pthread_mutex_unlock(phil->eat_mtx), ERROR);
-	(void)gettimeofday(phil->eat_timestamp, NULL);
+	gettimeofday(phil->eat_timestamp, NULL);
 	pthread_mutex_unlock(phil->eat_mtx);
 	if (check_print(phil, PR_EATING) == ERROR)
 		return (ERROR);

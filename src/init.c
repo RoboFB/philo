@@ -6,13 +6,13 @@
 /*   By: rgohrig <rgohrig@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:38:39 by rgohrig           #+#    #+#             */
-/*   Updated: 2025/09/01 16:03:57 by rgohrig          ###   ########.fr       */
+/*   Updated: 2025/09/01 21:41:26 by rgohrig          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_arrays(t_data *data)
+int	calloc_arrays(t_data *data)
 {
 	data->threads_philos = ft_calloc((data->total_philos), sizeof(
 				pthread_t));
@@ -66,7 +66,7 @@ void	free_arrays(t_data *data)
 	return ;
 }
 
-void	init_data(t_data *data)
+void	fill_eat_timestamps(t_data *data)
 {
 	int		count;
 
@@ -81,7 +81,7 @@ void	init_data(t_data *data)
 	return ;
 }
 
-void	init_phil_pointer(t_data *data)
+void	fill_phil_pointers(t_data *data)
 {
 	int		count;
 
